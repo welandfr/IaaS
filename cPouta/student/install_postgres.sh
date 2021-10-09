@@ -24,6 +24,9 @@ PG_USER=$(tr -cd 'a-z' < /dev/urandom | fold -w6 | head -n 1)
 PG_PASSWD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w20 | head -n 1)
 PG_CONN_URI="postgresql://${PG_USER}:${PG_PASSWD}@[GATEWAY-IP]:543$(hostname -I | cut -d . -f 4 | xargs)/${PG_DB}"
 
+# Make sure Finnish locale is installed (for correct collation etc)
+sudo locale-gen fi_FI.UTF-8
+
 # Install postgres
 sudo apt-get update -y && sudo apt install postgresql-12 -y
 
