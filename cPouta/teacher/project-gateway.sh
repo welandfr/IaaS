@@ -23,20 +23,19 @@
 #
 ####
 
-# Run as root
-sudo -s
-
 # Enable ip forwarding
-sysctl net.ipv4.ip_forward=1
+sudo sysctl net.ipv4.ip_forward=1
 # Make persistent
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
 
 # Flush all old NAT rules if any 
-iptables -t nat -F
+sudo iptables -t nat -F
 
+# Enter root shell
+sudo -i
 
 # SSH
-iptables -t nat -A PREROUTING -p tcp --dport 2210 -j DNAT --to-destination 192.168.1.10:22
+iptables -tnat -A PREROUTING -p tcp --dport 2210 -j DNAT --to-destination 192.168.1.10:22
 iptables -t nat -A PREROUTING -p tcp --dport 2211 -j DNAT --to-destination 192.168.1.11:22
 iptables -t nat -A PREROUTING -p tcp --dport 2212 -j DNAT --to-destination 192.168.1.12:22
 iptables -t nat -A PREROUTING -p tcp --dport 2213 -j DNAT --to-destination 192.168.1.13:22
@@ -496,21 +495,21 @@ iptables -t nat -A PREROUTING -p tcp --dport 54397 -j DNAT --to-destination 192.
 iptables -t nat -A PREROUTING -p tcp --dport 54398 -j DNAT --to-destination 192.168.1.98:5432
 iptables -t nat -A PREROUTING -p tcp --dport 54399 -j DNAT --to-destination 192.168.1.99:5432
 
-
+# exit root shell
+exit
 
 # Masquerade, note exclude loopback, otherwis nslookup will stop working
-iptables ! -o lo -t nat -A POSTROUTING -j MASQUERADE 
+sudo iptables ! -o lo -t nat -A POSTROUTING -j MASQUERADE 
 
 # Install iptables-persistent
-apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install iptables-persistent -y
+sudo apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get install iptables-persistent -y
 
 # Make iptables rules persistent
-iptables-save > /etc/iptables/rules.v4
+sudo iptables-save |sudo tee /etc/iptables/rules.v4 >/dev/null
 
 # Print out the rules
 cat /etc/iptables/rules.v4
 
-# Exit root shell
-exit
+echo "\nDone."
 
 
