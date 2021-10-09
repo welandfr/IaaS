@@ -34,7 +34,7 @@ chmod 600 ~/.pgpass
 
 # CREATE DB AND USER
 sudo -u postgres createuser $PG_USER
-sudo -u postgres createdb $PG_DB
+sudo -u postgres createdb -l fi_FI.UTF-8 -T template0 $PG_DB
 sudo -u postgres psql -c "ALTER USER $PG_USER with encrypted password '$PG_PASSWD'"
 
 # Set to listen on all interfaces (port is 5432)
