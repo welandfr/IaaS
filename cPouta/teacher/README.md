@@ -1,0 +1,2 @@
+# Managing cPouta projects
+
