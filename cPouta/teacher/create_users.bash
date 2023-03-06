@@ -1,8 +1,13 @@
 #!/bin/bash
 . ./.env
-for i in ${USERLIST//,/ }
+for user in ${USERLIST//,/ }
 do
-    # call your procedure/other scripts here below
-    echo "$i"
+    echo "---- Creating user: $user"
+    PASS=$(openssl rand -hex 6)
+    useradd -m -s /bin/bash $user
+    echo "$user:$PASS" | chpasswd
+    
 done
+
+# sudo deluser  --remove-home welandfr && sudo deluser --remove-home fredrik.welander
 
