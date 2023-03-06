@@ -1,9 +1,10 @@
-import os, subprocess, secrets
+import os, subprocess, secrets, requests
 from dotenv import load_dotenv
 load_dotenv()
 
 userlist = os.environ.get("USERLIST") 
 maildomain = os.environ.get("MAILDOMAIN")
+mailer_url = os.environ.get("MAILER_URL")
 
 users = [u.strip() for u in userlist.split(',')]
 for user in users:
