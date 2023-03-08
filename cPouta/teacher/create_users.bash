@@ -23,8 +23,8 @@ do
         useradd -m -s /bin/bash $user
         echo "$user:$PASS" | chpasswd
         curl -X POST -H "Content-Type: application/json" -d \
-                '{ "to": "'$user'@arcada.fi", "subject": "Your credentials", "body": "'$user' / '$PASS'" }' \
+                '{ "to": "'$user'@'$MAILDOMAIN'", "subject": "Your credentials", "body": "'$user' / '$PASS'" }' \
                 $MAILER_URL
-                
+
 done
 
