@@ -20,7 +20,7 @@ for user in ${USERLIST//,/ }
 do
     echo "---- Creating user: $user"
     if id "$user" &>/dev/null; then
-        echo "NOTICE: User $user already exists, skipping..."
+        echo "NOTICE: User $user already exists, skipping...\n"
     else
         PASS=$(openssl rand -hex 6)
         useradd -m -s /bin/bash $user
@@ -29,6 +29,6 @@ do
                 '{ "to": "'$user'@'$MAILDOMAIN'", "subject": "Your credentials", "body": "'$user' / '$PASS'" }' \
                 $MAILER_URL
     fi
-
+    echo
 done
 
