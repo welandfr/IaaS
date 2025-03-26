@@ -22,7 +22,7 @@ Instructions: https://docs.csc.fi/cloud/dbaas/cli/
 USEFUL:
 openstack database user list $INSTANCE_ID
 openstack database user delete $INSTANCE_ID $USER_NAME
-
+openstack database db delete $INSTANCE_ID $USER_NAME
 
 
 """
@@ -57,12 +57,12 @@ for user in USERLIST:
             # Delete user and database before recreation
             subprocess.run(["openstack", "database", "user", "delete", INSTANCE_ID, user], check=False)
             subprocess.run(["openstack", "database", "db", "delete", INSTANCE_ID, db_name], check=False)
-    
+
         # Create database
         subprocess.run(["openstack", "database", "db", "create", INSTANCE_ID, db_name], check=True)
          # Create user with database access
         subprocess.run(["openstack", "database", "user", "create", INSTANCE_ID, user, password, "--databases", db_name], check=True)
-   
+
         url = f"postgresql://{user}:{password}@{DB_HOST}:{DB_PORT}/{db_name}"
         connection_urls[user] = url
 
@@ -71,7 +71,7 @@ for user in USERLIST:
         print(e.output)
 
 print(" ...done.")
-json_urls=json.dumps(connection_urls, indent=4)    
+json_urls=json.dumps(connection_urls, indent=4)
 print(json_urls)
 timestamp = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 with open(f"out/connections_{timestamp}.txt", "w") as f:
